@@ -14,6 +14,15 @@ exports.create = (req, res) => {
                 error: 'Image could not be uploaded'
             })
         }
+        // check for all fields
+        const { name, description, price, category, quantity, shipping } = fields
+
+        if (!name || !description || !price || !category || !quantity || !shipping) {
+            return res.status(400).json({
+                error: 'All fields are required'
+            })
+        }
+
         let product = new Product(fields)
 
 
@@ -29,12 +38,12 @@ exports.create = (req, res) => {
             }
             product.photo.data = fs.readFileSync(files.photo.path)
             product.photo.contentType = files.photo.type
-        } 
+        }
 
         product.save((err, result) => {
             if (err) {
                 return res.status(400).json({
-                    error:errorHandler(err)
+                    error: errorHandler(err)
                 })
             }
             res.json(result)
