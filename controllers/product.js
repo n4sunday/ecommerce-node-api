@@ -16,8 +16,17 @@ exports.create = (req, res) => {
         }
         let product = new Product(fields)
 
+
+        //1kb = 1000
+        //1mb = 1000000 
+
         if (files.photo) {
-            console.log('FILE PHOTO: ',files.photo)
+            console.log('FILE PHOTO: ', files.photo)
+            if (files.photo.size > 1000000) {
+                return res.status(400).json({
+                    error: 'Image shold be less then 1mb in size'
+                })
+            }
             product.photo.data = fs.readFileSync(files.photo.path)
             product.photo.contentType = files.photo.type
         } 
