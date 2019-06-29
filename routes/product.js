@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const { create, productById, read } = require('../controllers/product')
+const { create, productById, read, remove } = require('../controllers/product')
 const { requireSignin, isAuth, isAdmin } = require('../controllers/auth')
 const { userById } = require('../controllers/user')
 
@@ -11,6 +11,12 @@ router.post('/product/create/:userId',
     isAdmin,
     isAuth,
     create,
+)
+router.delete('/product/:productId/:userId',
+    requireSignin,
+    isAdmin,
+    isAuth,
+    remove
 )
 
 router.param('userId', userById)
