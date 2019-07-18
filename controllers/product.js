@@ -210,14 +210,17 @@ exports.listBySearch = (req, res) => {
         if (req.body.filters[key].length > 0) {
             // gte - greater then price [0-10]
             // lte - less then
-            findArgs[key] = {
-                $gte: req.body.filters[key][0],
-                $lte: req.body.filters[key][1]
+            if (key === 'price') {
+                findArgs[key] = {
+                    $gte: req.body.filters[key][0],
+                    $lte: req.body.filters[key][1]
+                }
+            }
+            else {
+                findArgs[key] = req.body.filters[key]
             }
         }
-        else {
-            findArgs[key] = req.body.filters[key]
-        }
+
     }
 
     Product.find(findArgs)
@@ -237,13 +240,13 @@ exports.listBySearch = (req, res) => {
                 data
             })
         })
- }
+}
 
 exports.photo = (req, res, next) => {
     if (req.product.photo.data) {
-         res.set('Content-Type', req.product.photo.contentType)
-         return res.send(req.product.photo.data)
+        res.set('Content-Type', req.product.photo.contentType)
+        return res.send(req.product.photo.data)
     }
     next()
- }
+}
 
